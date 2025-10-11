@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<head>
+    <meta charset="UTF-8">
+    <title>Users</title>
+</head>
+<body>
+<div sec:authorize="isAuthenticated()">
+    <span>Welcome, <span sec:authentication="name"></span></span>
+    <form th:action="@{/logout}" method="post" style="display:inline;">
+        <input type="submit" value="Logout"/>
+    </form>
+</div>
+
+<div th:switch="${users}">
+    <h2 th:case="null">No users found!</h2>
+    <div th:case="*">
+        <h2>Users</h2>
+        <table border="1">
+            <thead>
+            <tr>
+                <th>Id</th>
+                <th>First name</th>
+                <th>Last name</th>
+                <th>Username</th>
+                <th>Roles</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="user : ${users}">
+                <td th:text="${user.id}"></td>
+                <td th:text="${user.firstName}"></td>
+                <td th:text="${user.lastName}"></td>
+                <td th:text="${user.username}"></td>
+                <td th:text="${user.roles}"></td>
+                <td>
+                    <a th:href="@{/admin/user-update/{id}(id=${user.id})}">Edit</a>
+                    <a th:href="@{/admin/user-delete/{id}(id=${user.id})}">Delete</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <p><a href="/admin/user-create">Create user</a></p>
+</div>
+</body>
+</html>

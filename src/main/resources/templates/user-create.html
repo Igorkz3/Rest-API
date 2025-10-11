@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Create user</title>
+</head>
+<body>
+<h2>Create User</h2>
+
+<form th:action="@{/admin/user-create}" th:object="${user}" method="post">
+
+    <label for="firstName">First name</label><br>
+    <input type="text" th:field="*{firstName}" id="firstName" placeholder="First Name"><br>
+    <div th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}" style="color:red"></div>
+    <br>
+
+    <label for="lastName">Last name</label><br>
+    <input type="text" th:field="*{lastName}" id="lastName" placeholder="Last Name"><br>
+    <div th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}" style="color:red"></div>
+    <br>
+
+    <label for="username">Username</label><br>
+    <input type="text" th:field="*{username}" id="username" placeholder="Username"><br>
+    <br>
+
+    <label for="password">Password</label><br>
+    <input type="password" th:field="*{password}" id="password" placeholder="Password"><br>
+    <br>
+
+    <label>Roles</label><br>
+    <div th:each="role : ${allRoles}">
+        <input type="checkbox" th:value="${role.id}" name="roles"
+               th:id="'role_' + ${role.id}">
+        <label th:for="'role_' + ${role.id}" th:text="${role.name}"></label>
+    </div>
+    <br>
+
+    <input type="submit" value="Create User">
+</form>
+
+<br>
+<a th:href="@{/admin/users}">← Back to user list</a>
+
+</body>
+</html>
