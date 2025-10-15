@@ -1,6 +1,9 @@
 package ru.kata.spring.boot_security.demo.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Pattern;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -8,6 +11,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "users")
@@ -24,7 +28,14 @@ public class User implements UserDetails {
     @Pattern(regexp = "^[A-Za-z]+$", message = "Last name must contain only letters A-Z or a-z")
     private String lastName;
 
+    @Column(name = "age")
+    @Min(value = 1, message = "Age must be at least 1")
+    @Max(value = 150, message = "Age must be less than 150")
+    private Integer age;
+
     @Column(name = "username", unique = true)
+    @Email(message = "Provide a valid email address")
+    @Pattern(regexp = ".+@.+\\..+", message = "Provide a valid email address")
     private String username;
 
     @Column(name = "password")
@@ -63,6 +74,14 @@ public class User implements UserDetails {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public Integer getAge() {
+        return age;
+    }
+
+    public void setAge(Integer age) {
+        this.age = age;
     }
 
     @Override
@@ -118,5 +137,10 @@ public class User implements UserDetails {
 
     public void addRole(Role role) {
         this.roles.add(role);
+    }
+    public String getRolesString() {
+        return roles.stream()
+                .map(role -> role.getName().replace("ROLE", ""))
+                .collect(Collectors.joining());
     }
 }
