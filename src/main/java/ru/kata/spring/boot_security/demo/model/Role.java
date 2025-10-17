@@ -43,6 +43,7 @@ public class Role implements GrantedAuthority {
         return name;
     }
 
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -58,6 +59,9 @@ public class Role implements GrantedAuthority {
 
     @Override
     public String toString() {
-        return name;
+        return "Role{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                '}';
     }
 }

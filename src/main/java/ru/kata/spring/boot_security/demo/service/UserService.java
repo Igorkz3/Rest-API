@@ -57,6 +57,18 @@ public class UserService implements UserDetailsService {
         return userRepository.save(user);
     }
 
+    public User updateUser(User user) {
+        User existingUser = findById(user.getId());
+        if (existingUser != null) {
+            if (user.getPassword() == null || user.getPassword().isEmpty() || user.getPassword().equals(existingUser.getPassword())) {
+                user.setPassword(existingUser.getPassword());
+            } else if (!user.getPassword().startsWith("$2a$")) {
+                user.setPassword(passwordEncoder.encode(user.getPassword()));
+            }
+        }
+        return userRepository.save(user);
+    }
+
     public void deleteById(Long id) {
         userRepository.deleteById(id);
     }

@@ -52,6 +52,15 @@ public class User implements UserDetails {
     public User() {
     }
 
+
+    public User(String firstName, String lastName, Integer age, String username, String password, Set<Role> roles) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.age = age;
+        this.username = username;
+        this.password = password;
+        this.roles = roles;
+    }
     public Long getId() {
         return id;
     }
@@ -138,9 +147,23 @@ public class User implements UserDetails {
     public void addRole(Role role) {
         this.roles.add(role);
     }
+
     public String getRolesString() {
         return roles.stream()
-                .map(role -> role.getName().replace("ROLE", ""))
-                .collect(Collectors.joining());
+                .map(role -> role.getName().replace("ROLE_", ""))
+                .collect(Collectors.joining(", "));
+    }
+
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", age=" + age +
+                ", username='" + username + '\'' +
+                ", roles=" + (roles != null ? roles.stream().map(Role::getName).collect(Collectors.toList()) : "null") +
+                '}';
     }
 }
